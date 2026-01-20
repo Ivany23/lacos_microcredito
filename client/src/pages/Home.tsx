@@ -25,11 +25,11 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Hero Section */}
+      {}
       <section id="inicio" className="relative bg-gradient-to-br from-gray-900 to-primary/90 text-white py-20 lg:py-32 overflow-hidden">
-        {/* Abstract background elements */}
+        {}
         <div className="absolute inset-0 bg-primary/20 backdrop-blur-3xl" />
-        {/* Unsplash image: Professional finance/office setting */}
+        {}
         <div
           className="absolute inset-0 opacity-20 bg-cover bg-center mix-blend-overlay"
           style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2832&auto=format&fit=crop")' }}
@@ -54,11 +54,11 @@ export default function Home() {
                 Sem burocracia complexa, 100% digital e seguro.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/register">
+                <a href="#contacto">
                   <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white font-semibold px-8 py-6 rounded-xl shadow-lg shadow-secondary/25 text-lg">
-                    Solicitar Crédito
+                    Fale Conosco
                   </Button>
-                </Link>
+                </a>
                 <a href="#sobre">
                   <Button size="lg" variant="outline" className="border-white/30 hover:bg-white/10 text-white px-8 py-6 rounded-xl text-lg">
                     Saber Mais
@@ -79,7 +79,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats/Trust Section */}
+      {}
       <section className="bg-white py-12 border-b border-gray-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -103,7 +103,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
@@ -131,13 +131,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Benefits Section */}
+      {}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
               <div className="absolute -inset-4 bg-secondary/20 rounded-2xl transform -rotate-3"></div>
-              {/* Unsplash image: Happy African business people */}
+              {}
               <img
                 src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?q=80&w=2938&auto=format&fit=crop"
                 alt="Equipe feliz"
@@ -157,7 +157,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
+      {}
       <section id="sobre" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-16">
@@ -204,7 +204,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {}
       <section id="contacto" className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -251,7 +251,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Locations Section */}
+      {}
       <section id="localizacoes" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -308,7 +308,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {}
       <section className="py-20 bg-primary">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-6">Pronto para realizar seus sonhos?</h2>
@@ -316,11 +316,11 @@ export default function Home() {
             Comece sua jornada financeira conosco. Crédito rápido, transparente e acessível.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link href="/register">
+            <a href="#contacto">
               <Button size="lg" className="bg-white text-primary hover:bg-gray-100 font-bold px-8 py-6 rounded-xl shadow-lg">
-                Abrir Minha Conta Agora
+                Fale Conosco Agora
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>

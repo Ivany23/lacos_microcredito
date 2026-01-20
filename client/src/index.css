@@ -5,18 +5,18 @@
 @tailwind utilities;
 
 :root {
-  /* Corporate Blue Palette */
+  
   --primary: 216 100% 40%;
-  /* #0052CC */
+  
   --primary-foreground: 0 0% 100%;
 
   --secondary: 205 90% 60%;
-  /* #3FA9F5 */
+  
   --secondary-foreground: 0 0% 100%;
 
   --background: 0 0% 100%;
   --foreground: 0 0% 10%;
-  /* #1A1A1A */
+  
 
   --card: 0 0% 100%;
   --card-foreground: 0 0% 10%;
@@ -108,5 +108,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

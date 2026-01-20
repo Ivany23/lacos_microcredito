@@ -1,9 +1,10 @@
 import { Switch, Route } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/hooks/use-auth";
 import NotFound from "@/pages/not-found";
 
-// Pages
+
 import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Services from "@/pages/Services";
@@ -11,8 +12,14 @@ import Locations from "@/pages/Locations";
 import Blog from "@/pages/Blog";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Auth/Login";
-import Register from "@/pages/Auth/Register";
+import LoginAdmin from "@/pages/Auth/LoginAdmin";
 import Profile from "@/pages/Profile";
+import AdminDashboard from "@/pages/Admin/Dashboard";
+import AdminClients from "@/pages/Admin/Clients";
+import ClientDetail from "@/pages/Admin/ClientDetail/index";
+import AdminLoans from "@/pages/Admin/Loans";
+import AdminPayments from "@/pages/Admin/Payments";
+import AdminSettings from "@/pages/Admin/Settings";
 import BlogPost1 from "@/pages/BlogPost1";
 import BlogPost2 from "@/pages/BlogPost2";
 import BlogPost3 from "@/pages/BlogPost3";
@@ -48,12 +55,18 @@ function Router() {
             <Route path="/contact" component={Contact} />
             <Route path="/simulator" component={SimulatorPage} />
 
-            {/* Auth Routes */}
+            {}
             <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
+            <Route path="/login-admin" component={LoginAdmin} />
 
-            {/* Protected Routes */}
+            {}
             <Route path="/profile" component={Profile} />
+            <Route path="/admin/dashboard" component={AdminDashboard} />
+            <Route path="/admin/clients" component={AdminClients} />
+            <Route path="/admin/clients/:id" component={ClientDetail} />
+            <Route path="/admin/loans" component={AdminLoans} />
+            <Route path="/admin/payments" component={AdminPayments} />
+            <Route path="/admin/settings" component={AdminSettings} />
 
             <Route component={NotFound} />
         </Switch>
@@ -62,10 +75,12 @@ function Router() {
 
 function App() {
     return (
-        <TooltipProvider>
-            <Toaster />
-            <Router />
-        </TooltipProvider>
+        <AuthProvider>
+            <TooltipProvider>
+                <Toaster />
+                <Router />
+            </TooltipProvider>
+        </AuthProvider>
     );
 }
 

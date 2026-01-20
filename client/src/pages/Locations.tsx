@@ -53,7 +53,7 @@ export default function Locations() {
           </div>
 
           <div className="bg-gray-200 rounded-2xl h-[400px] overflow-hidden shadow-lg relative">
-            {/* Placeholder for Map - In a real app, embed Google Maps iframe here */}
+            {}
             <div className="absolute inset-0 flex items-center justify-center bg-gray-300">
               <div className="text-center p-6">
                 <MapPin className="w-12 h-12 text-primary mx-auto mb-4" />
@@ -61,7 +61,7 @@ export default function Locations() {
                 <p className="text-gray-500 text-sm">Visualize nossa localização no Google Maps</p>
               </div>
             </div>
-            {/* Embed would go here */}
+            {}
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3587.356720766347!2d32.57317331502476!3d-25.96814498354261!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1ee69a8b13c77d5d%3A0x6b83445582962132!2sMaputo%2C%20Mozambique!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus" 
               width="100%" 

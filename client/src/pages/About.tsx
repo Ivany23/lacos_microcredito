@@ -26,7 +26,7 @@ export default function About() {
               </p>
             </div>
             <div className="relative h-64 md:h-auto">
-              {/* Unsplash image: Maputo city landscape or team */}
+              {}
               <img
                 src="/about-team.png"
                 alt="Nossa missão"

@@ -16,7 +16,7 @@ export default function Contact() {
       title: "Mensagem enviada!",
       description: "Entraremos em contato em breve.",
     });
-    // Reset form logic would go here
+    
   };
 
   return (

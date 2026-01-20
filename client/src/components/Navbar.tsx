@@ -27,7 +27,7 @@ export function Navbar() {
         element.scrollIntoView({ behavior: "smooth", block: "start" });
         setIsOpen(false);
       } else {
-        // If element not found, navigate to home first
+        
         window.location.href = href;
       }
     }
@@ -81,11 +81,6 @@ export function Navbar() {
                 <Link href="/login" className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors">
                   Login
                 </Link>
-                <Link href="/register">
-                  <Button className="bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/25">
-                    Abrir Conta
-                  </Button>
-                </Link>
               </>
             )}
           </div>
@@ -105,7 +100,7 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {}
       {isOpen && (
         <div className="md:hidden bg-white border-b border-border/50">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -139,9 +134,6 @@ export function Navbar() {
                 <div className="flex flex-col gap-2 px-3">
                   <Link href="/login" onClick={() => setIsOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">Login</Button>
-                  </Link>
-                  <Link href="/register" onClick={() => setIsOpen(false)}>
-                    <Button className="w-full">Abrir Conta</Button>
                   </Link>
                 </div>
               )}

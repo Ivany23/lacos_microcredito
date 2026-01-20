@@ -18,7 +18,7 @@ export function LoanSimulator() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    const interest = amount * 0.20; // 20% fixed interest as per requirements
+    const interest = amount * 0.20; 
     const totalToPay = amount + interest;
     setTotal(totalToPay);
     setMonthlyPayment(totalToPay / months);
