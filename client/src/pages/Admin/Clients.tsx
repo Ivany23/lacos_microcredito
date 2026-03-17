@@ -16,7 +16,6 @@ export default function AdminClients() {
     const [isAdding, setIsAdding] = useState(false);
     const [currentStep, setCurrentStep] = useState<Step>('bio');
 
-    
     const [bio, setBio] = useState({
         nome: "",
         sexo: ClienteSexo.MASCULINO,
@@ -64,7 +63,6 @@ export default function AdminClients() {
 
     useEffect(() => { loadClients(); }, []);
 
-    
     const handleFinalize = async () => {
         
         if (!bio.nome || !bio.telefone || !bio.dataNascimento) {
@@ -92,7 +90,6 @@ export default function AdminClients() {
         try {
             console.log("🔵 [INÍCIO] Iniciando gravação do cliente...");
 
-            
             console.log("📝 [PASSO 1/3] Criando perfil do cliente...", bio);
             const resClient = await clientService.createCliente(bio);
             const clienteId = resClient.clienteId || resClient.id;
@@ -103,7 +100,6 @@ export default function AdminClients() {
 
             console.log("✅ [PASSO 1/3] Cliente criado com sucesso! ID:", clienteId);
 
-            
             console.log("📍 [PASSO 2/3] Criando localização e ocupação...");
             console.log("   → Localização:", { ...location, clienteId });
             console.log("   → Ocupação:", { ...occupation, clienteId });
@@ -119,7 +115,6 @@ export default function AdminClients() {
             ]);
             console.log("✅ [PASSO 2/3] Localização e ocupação criadas com sucesso!");
 
-            
             console.log("📄 [PASSO 3/3] Criando documento...");
             const formData = new FormData();
             formData.append("clienteId", clienteId);
@@ -140,7 +135,6 @@ export default function AdminClients() {
             console.error("❌ [DETALHES] Mensagem:", error.message);
             console.error("❌ [DETALHES] Stack:", error.stack);
 
-            
             let userMessage = "Ocorreu um erro ao gravar os dados.";
 
             if (error.message.includes("telefone")) {

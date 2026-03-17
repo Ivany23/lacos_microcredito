@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { User, MapPin, Briefcase, Phone, Mail, FileText, CreditCard, Building2, Calendar, Map, CheckCircle2 } from "lucide-react";
+import { User, MapPin, Briefcase, Phone, Mail, FileText, CreditCard, Building2, Calendar, Map, CheckCircle2, Eye, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { clientDetailService } from "@/lib/client-detail.service";
 
@@ -33,10 +33,28 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
     const { toast } = useToast();
     const [form, setForm] = useState<any>({});
 
+    const handleDownloadDocument = async (docId: string, fileName: string, isView = false) => {
+        try {
+            const blob = await clientDetailService.getDocumentFile(docId);
+            const url = window.URL.createObjectURL(blob);
+            if (isView) {
+                window.open(url, '_blank');
+            } else {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        } catch (error: any) {
+            toast({ title: "Erro", description: error.message, variant: "destructive" });
+        }
+    };
+
     useEffect(() => {
         if (data) {
             setForm({
-                // Cliente Entity
                 clienteId: data.clienteId || data.id,
                 nome: data.nome || "",
                 sexo: data.sexo || "",
@@ -46,7 +64,6 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
                 dataNascimento: formatDateForInput(data.dataNascimento),
                 dataCadastro: data.dataCadastro,
 
-                // Localizacao Entity
                 localizacaoId: data.localizacao?.localizacaoId,
                 provincia: data.localizacao?.provincia || "",
                 distrito: data.localizacao?.distrito || "",
@@ -55,14 +72,12 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
                 quarteirao: data.localizacao?.quarteirao || "",
                 numeroDaCasa: data.localizacao?.numeroDaCasa || "",
 
-                // Ocupacao Entity (First item)
                 ocupacaoId: data.ocupacoes?.[0]?.ocupacaoId,
-                ocupacaoNome: data.ocupacoes?.[0]?.nome || "", // 'nome' in DB
+                ocupacaoNome: data.ocupacoes?.[0]?.nome || "",
                 ocupacaoDescricao: data.ocupacoes?.[0]?.descricao || "",
                 ocupacaoRenda: data.ocupacoes?.[0]?.rendaMinima || 0,
                 ocupacaoCodigo: data.ocupacoes?.[0]?.codigo || "",
 
-                // Documento Entity (First item)
                 documentoId: data.documentos?.[0]?.documentoId,
                 tipoDocumento: data.documentos?.[0]?.tipoDocumento || "",
                 numeroDocumento: data.documentos?.[0]?.numeroDocumento || ""
@@ -73,13 +88,11 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
     return (
         <div className="flex flex-col md:flex-row min-h-[850px] bg-white shadow-2xl rounded-[2.5rem] overflow-hidden font-sans border border-[#E5E5EA] animate-in fade-in duration-500 relative">
 
-            {/* COLUNA ESQUERDA (Sidebar Azul) */}
             <aside className="w-full md:w-[38%] bg-gradient-to-br from-[#007AFF] to-[#005EC4] text-white p-10 flex flex-col relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"></div>
                 <div className="absolute bottom-0 right-0 w-80 h-80 bg-black/10 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
 
                 <div className="relative z-10 space-y-10">
-                    {/* Cabeçalho do Perfil */}
                     <div className="space-y-4">
                         <div className="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-md border-2 border-white/30 flex items-center justify-center text-4xl font-black shadow-xl mb-6">
                             {getInitials(form.nome)}
@@ -95,7 +108,7 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
 
                     <div className="h-px bg-white/20 w-full mb-6"></div>
 
-                    {/* Informações de Contato */}
+                    { }
                     <div className="space-y-6">
                         <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-blue-200">Contacto Directo</h3>
                         <div className="space-y-5">
@@ -107,9 +120,29 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
 
                     <div className="h-px bg-white/20 w-full mb-6"></div>
 
-                    {/* Documentação */}
+                    { }
                     <div className="space-y-6">
-                        <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-blue-200">Documentação</h3>
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-blue-200">Documentação</h3>
+                            {form.documentoId && (
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleDownloadDocument(form.documentoId, `doc_${form.numeroDocumento}`, true)}
+                                        className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
+                                        title="Visualizar Documento"
+                                    >
+                                        <Eye className="w-4 h-4 text-white" />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDownloadDocument(form.documentoId, `doc_${form.numeroDocumento}`, false)}
+                                        className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg transition-colors flex items-center justify-center"
+                                        title="Baixar Documento"
+                                    >
+                                        <Download className="w-4 h-4 text-white" />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
                         <div className="space-y-4">
                             <DocumentItem label="Tipo Doc." value={form.tipoDocumento} />
                             <DocumentItem label="Número" value={form.numeroDocumento} highlight />
@@ -118,10 +151,9 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
                 </div>
             </aside>
 
-            {/* COLUNA DIREITA (Conteúdo Branco) */}
             <main className="flex-1 bg-white p-10 md:p-14 overflow-y-auto space-y-12">
 
-                {/* Seção Profissional */}
+                { }
                 <section>
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-10 w-1 bg-[#007AFF] rounded-full"></div>
@@ -137,7 +169,7 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
 
                 <div className="h-px bg-[#E5E5EA] w-full"></div>
 
-                {/* Seção Residência */}
+                { }
                 <section>
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-10 w-1 bg-[#34C759] rounded-full"></div>
@@ -156,7 +188,7 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
                     </div>
                 </section>
 
-                {/* Seção Outros Detalhes (Nacionalidade, etc) */}
+                { }
                 <section>
                     <div className="flex items-center gap-4 mb-8">
                         <div className="h-10 w-1 bg-[#FF9500] rounded-full"></div>
@@ -173,10 +205,6 @@ export default function Profile({ data, refresh }: { data: any, refresh: () => v
         </div>
     );
 }
-
-// -----------------------------------------------------------------------------
-// Componentes Auxiliares
-// -----------------------------------------------------------------------------
 
 function ContactItem({ icon: Icon, label, value }: any) {
     return (

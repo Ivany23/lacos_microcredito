@@ -105,7 +105,7 @@ export default function Security({ data, refresh }: { data: any, refresh: () => 
                 ) : (
                     <div className="bg-[#FF3B30]/5 border border-[#FF3B30] p-4 rounded-xl">
                         <p className="font-bold text-[#1C1C1E] mb-2">Tem a certeza?</p>
-                        <p className="text-sm text-[#8E8E93] mb-4">Esta ação não pode ser desfeita. Todos os dados (empréstimos, documentos) serão apagados.</p>
+                        <p className="text-sm text-[#8E8E93] mb-4">Esta ação não pode ser desfeita. Todos os dados (pagamentos, empréstimos, penalizações, penhores, testemunhas e documentos) serão apagados.</p>
                         <div className="flex gap-3">
                             <button onClick={handleClientDelete} disabled={isSaving} className="px-4 py-2 bg-[#FF3B30] text-white rounded-lg font-bold text-sm hover:bg-[#D70015]">Confirmar Exclusão</button>
                             <button onClick={() => setShowDeleteConfirm(false)} className="px-4 py-2 bg-white border border-[#E5E5EA] text-[#1C1C1E] rounded-lg font-bold text-sm hover:bg-[#F2F2F7]">Cancelar</button>

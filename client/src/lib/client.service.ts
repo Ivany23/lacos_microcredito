@@ -106,7 +106,6 @@ export const clientService = {
         const payload = { ...data };
         if (!payload.email) delete payload.email;
 
-        
         if (payload.dataNascimento && !payload.dataNascimento.includes('T')) {
             
             payload.dataNascimento = payload.dataNascimento.split('T')[0];
@@ -150,7 +149,6 @@ export const clientService = {
                 err = { message: response.statusText };
             }
 
-            
             let errorMessage = "Falha ao criar cliente";
             if (err.message) {
                 errorMessage = err.message;

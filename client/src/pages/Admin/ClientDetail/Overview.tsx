@@ -1,53 +1,59 @@
-import { Wallet, TrendingUp, AlertTriangle, CheckCircle2, DollarSign, Calendar, Bell, X } from "lucide-react";
+import { Wallet, TrendingUp, AlertTriangle, CheckCircle2, DollarSign, Calendar, Bell, X, FileText, Eye, Download } from "lucide-react";
 import { useState } from "react";
+import { clientDetailService } from "@/lib/client-detail.service";
+import { useToast } from "@/hooks/use-toast";
+
+const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
 
 export default function Overview({ data }: { data: any }) {
-
-    // -------------------------------------------------------------------------
-    // 1. Extração e Normalização de Dados Reais
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // 1. Dados da API (Dashboard Pré-calculado)
-    // -------------------------------------------------------------------------
+    const { toast } = useToast();
     const dashboard = data.dashboard || {};
     const { financeiro, status, grafico } = dashboard;
     const notificacoes = Array.isArray(data.notificacoes) ? data.notificacoes : [];
 
-    // State do Modal de Notificações
     const [selectedNotification, setSelectedNotification] = useState<any>(null);
 
-    // -------------------------------------------------------------------------
-    // Função para abrir notificação (Modo Visualização Admin)
-    // -------------------------------------------------------------------------
     const handleOpenNotification = (note: any) => {
         setSelectedNotification(note);
     };
 
-    // -------------------------------------------------------------------------
-    // Mapeamento de Dados do Dashboard
-    // -------------------------------------------------------------------------
+    const handleDownloadDocument = async (docId: string, fileName: string, isView = false) => {
+        try {
+            const blob = await clientDetailService.getDocumentFile(docId);
+            const url = window.URL.createObjectURL(blob);
+            if (isView) {
+                window.open(url, '_blank');
+            } else {
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        } catch (error: any) {
+            toast({ title: "Erro", description: error.message, variant: "destructive" });
+        }
+    };
+
     const dividaTotal = financeiro?.dividaTotal || 0;
     const totalPenalizacoes = financeiro?.totalPenalizacoes || 0;
     const totalPago = financeiro?.totalPago || 0;
 
-    // Status e Score
     const ativosCount = status?.ativos || 0;
     const atrasadosCount = status?.atrasados || 0;
     const score = status?.score || 0;
 
-    // Próximo Pagamento
     const nextPayment = status?.nextPayment ? {
         ...status.nextPayment,
         data: new Date(status.nextPayment.data)
     } : null;
 
-    // Dados do Gráfico (Garante que array existe)
     const chartData = Array.isArray(grafico) ? grafico : [];
     const maxChartVal = Math.max(...chartData.map((d: any) => Math.max(d.valorPago || 0, d.valorEmprestado || 0)), 1000);
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 relative">
-            {/* Modal de Detalhes da Notificação */}
             {selectedNotification && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setSelectedNotification(null)}>
                     <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl scale-100 animate-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
@@ -77,7 +83,6 @@ export default function Overview({ data }: { data: any }) {
                 </div>
             )}
 
-            {/* Header de Alertas Urgentes */}
             {nextPayment && nextPayment.atrasado && (
                 <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -179,7 +184,7 @@ export default function Overview({ data }: { data: any }) {
                     </div>
 
                     <div className="space-y-6">
-                        {/* Seção de Notificações Integrada */}
+
                         {notificacoes.length > 0 && (
                             <div className="bg-white rounded-[2rem] p-8 border border-[#E5E5EA] shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div className="flex justify-between items-center mb-6">
@@ -221,12 +226,11 @@ export default function Overview({ data }: { data: any }) {
                         )}
 
                         <div className="bg-white rounded-[2rem] p-8 border border-[#E5E5EA] shadow-sm hidden">
-                            {/* Seção Empréstimos removida conforme solicitado */}
+
                         </div>
                     </div>
                 </div>
 
-                {/* Coluna Direita */}
                 <div className="space-y-6">
                     <div className="bg-white rounded-[2rem] p-6 border border-[#E5E5EA] shadow-sm">
                         <h3 className="font-bold text-[#8E8E93] text-xs uppercase tracking-wide mb-4">Detalhes da Conta</h3>
@@ -252,6 +256,39 @@ export default function Overview({ data }: { data: any }) {
                         <p className="text-2xl font-bold tracking-tight mb-1">{data.localizacao?.cidade || "N/A"}</p>
                         <p className="text-white/60 text-sm font-medium">{data.localizacao?.bairro || "..."}</p>
                     </div>
+
+                    {data.documentos?.[0] && (
+                        <div className="bg-white rounded-[2rem] p-6 border border-[#E5E5EA] shadow-sm">
+                            <h3 className="font-bold text-[#8E8E93] text-xs uppercase tracking-wide mb-4">Documento Identificação</h3>
+                            <div className="flex items-center justify-between p-4 bg-[#F2F2F7] rounded-2xl">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-[#007AFF]/10 rounded-xl flex items-center justify-center text-[#007AFF]">
+                                        <FileText className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-[#1C1C1E]">{data.documentos[0].tipoDocumento}</p>
+                                        <p className="text-[10px] text-[#8E8E93] font-medium">Ref: {data.documentos[0].numeroDocumento.substring(0, 10)}...</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleDownloadDocument(data.documentos[0].documentoId, `doc_${data.documentos[0].numeroDocumento}`, true)}
+                                        className="p-2 bg-white hover:bg-white/80 rounded-xl shadow-sm transition-all text-[#1C1C1E] flex items-center justify-center"
+                                        title="Visualizar"
+                                    >
+                                        <Eye className="w-4 h-4" />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDownloadDocument(data.documentos[0].documentoId, `doc_${data.documentos[0].numeroDocumento}`, false)}
+                                        className="p-2 bg-[#007AFF] hover:bg-[#007AFF]/90 rounded-xl shadow-sm transition-all text-white flex items-center justify-center"
+                                        title="Download"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -3,13 +3,11 @@ import { useState, useEffect } from "react";
 import { useRoute, useLocation } from "wouter";
 import { clientDetailService } from "@/lib/client-detail.service";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, LayoutDashboard, User, Wallet, FileText, Shield, ArrowLeft } from "lucide-react";
-
+import { Loader2, LayoutDashboard, User, Shield, ArrowLeft, Pencil, Wallet } from "lucide-react";
 
 import Overview from "@/pages/Admin/ClientDetail/Overview";
 import Profile from "@/pages/Admin/ClientDetail/Profile";
-import Loans from "@/pages/Admin/ClientDetail/Loans";
-import Documents from "@/pages/Admin/ClientDetail/Documents";
+import EditData from "@/pages/Admin/ClientDetail/EditData";
 import Security from "@/pages/Admin/ClientDetail/Security";
 
 export default function ClientDetailIndex() {
@@ -37,7 +35,6 @@ export default function ClientDetailIndex() {
                 clientDetailService.getClientDashboard(id)
             ]);
 
-            // Integrando os dados para uso nos componentes filhos
             const fullData = {
                 ...client,
                 pagamentos: Array.isArray(payments) ? payments : [],
@@ -87,13 +84,11 @@ export default function ClientDetailIndex() {
         );
     }
 
-
     const renderContent = () => {
         switch (activeTab) {
             case 'overview': return <Overview data={data} />;
             case 'profile': return <Profile data={data} refresh={() => loadData(params!.id)} />;
-            case 'loans': return <Loans data={data} />;
-            case 'documents': return <Documents data={data} />;
+            case 'edit': return <EditData data={data} refresh={() => loadData(params!.id)} />;
             case 'security': return <Security data={data} refresh={() => loadData(params!.id)} />;
             default: return <Overview data={data} />;
         }
@@ -102,7 +97,6 @@ export default function ClientDetailIndex() {
     return (
         <AdminLayout title="Gestão do Cliente">
             <div className="max-w-[1200px] mx-auto">
-                { }
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <button onClick={() => setLocation("/admin/clients")} className="flex items-center gap-2 text-[#8E8E93] hover:text-[#007AFF] transition-colors font-medium">
                         <ArrowLeft className="w-5 h-5" />
@@ -120,7 +114,6 @@ export default function ClientDetailIndex() {
                     </div>
                 </div>
 
-                { }
                 <div className="flex overflow-x-auto pb-4 gap-2 mb-8 no-scrollbar">
                     <TabButton
                         active={activeTab === 'overview'}
@@ -135,16 +128,10 @@ export default function ClientDetailIndex() {
                         label="Perfil & Dados"
                     />
                     <TabButton
-                        active={activeTab === 'loans'}
-                        onClick={() => setActiveTab('loans')}
-                        icon={Wallet}
-                        label="Empréstimos"
-                    />
-                    <TabButton
-                        active={activeTab === 'documents'}
-                        onClick={() => setActiveTab('documents')}
-                        icon={FileText}
-                        label="Documentos"
+                        active={activeTab === 'edit'}
+                        onClick={() => setActiveTab('edit')}
+                        icon={Pencil}
+                        label="Editar Dados"
                     />
                     <TabButton
                         active={activeTab === 'security'}
@@ -154,7 +141,6 @@ export default function ClientDetailIndex() {
                     />
                 </div>
 
-                { }
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                     {renderContent()}
                 </div>
