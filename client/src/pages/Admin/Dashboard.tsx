@@ -26,7 +26,9 @@ import {
     Tooltip,
     BarChart,
     Bar,
-    Cell
+    Cell,
+    PieChart,
+    Pie
 } from 'recharts';
 import { AdminLayout } from "@/components/AdminLayout";
 
@@ -36,19 +38,25 @@ export default function AdminDashboard() {
     const [data, setData] = useState<DashboardData | null>(null);
     const [pagamentosData, setPagamentosData] = useState<any>(null);
     const [emprestimosData, setEmprestimosData] = useState<any>(null);
+    const [riscoData, setRiscoData] = useState<any>(null);
+    const [projecoesData, setProjecoesData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const loadDashboardData = async (silent = false) => {
         if (!silent) setIsLoading(true);
         try {
-            const [mainData, pData, eData] = await Promise.all([
+            const [mainData, pData, eData, rData, prData] = await Promise.all([
                 dashboardService.getDashboardPrincipal(),
                 dashboardService.getAnalisePagamentos(),
-                dashboardService.getAnaliseEmprestimos()
+                dashboardService.getAnaliseEmprestimos(),
+                dashboardService.getAnaliseRisco(),
+                dashboardService.getProjecoesFinanceiras()
             ]);
             setData(mainData);
             setPagamentosData(pData);
             setEmprestimosData(eData);
+            setRiscoData(rData);
+            setProjecoesData(prData);
         } catch (error) {
             if (!silent) {
                 toast({
@@ -333,6 +341,84 @@ export default function AdminDashboard() {
                                 </div>
                             ) : (
                                 <div className="flex-1 flex items-center justify-center text-white/20 uppercase font-black tracking-widest text-xs">Sincronizando...</div>
+                            )}
+                        </div>
+                    </section>
+                </div>
+
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="space-y-1">
+                                <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
+                                    <TrendingUp className="w-6 h-6 text-[#34C759]" />
+                                    Projeção de Arrecadação
+                                </h3>
+                                <p className="text-[#8E8E93] text-sm font-semibold ml-8">Próximos 3 meses (Estimativa)</p>
+                            </div>
+                        </div>
+                        <div className="h-[300px] w-full mt-4 -ml-4">
+                            {isLoading ? (
+                                <div className="h-full w-full bg-[#F2F2F7] animate-pulse rounded-2xl"></div>
+                            ) : (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={[
+                                        { name: projecoesData?.projecaoArrecadacao?.mes1?.periodo, valor: projecoesData?.projecaoArrecadacao?.mes1?.valorNumerico, color: '#34C759' },
+                                        { name: projecoesData?.projecaoArrecadacao?.mes2?.periodo, valor: projecoesData?.projecaoArrecadacao?.mes2?.valorNumerico, color: '#007AFF' },
+                                        { name: projecoesData?.projecaoArrecadacao?.mes3?.periodo, valor: projecoesData?.projecaoArrecadacao?.mes3?.valorNumerico, color: '#5856D6' }
+                                    ]}>
+                                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#8E8E93', fontSize: 10, fontWeight: 700 }} />
+                                        <YAxis hide />
+                                        <Tooltip cursor={{ fill: '#F2F2F7' }} contentStyle={{ borderRadius: '14px', border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.1)' }} />
+                                        <Bar dataKey="valor" radius={[12, 12, 12, 12]} barSize={40}>
+                                            <Cell fill="#34C759" opacity={0.6} />
+                                            <Cell fill="#007AFF" opacity={0.8} />
+                                            <Cell fill="#5856D6" />
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            )}
+                        </div>
+                    </section>
+
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="space-y-1">
+                                <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
+                                    <Clock className="w-6 h-6 text-[#FF3B30]" />
+                                    Maturação da Dívida (Aging)
+                                </h3>
+                                <p className="text-[#8E8E93] text-sm font-semibold ml-8">Carteira em risco por idade</p>
+                            </div>
+                        </div>
+                        <div className="h-[300px] w-full flex items-center justify-center">
+                            {isLoading ? (
+                                <div className="h-full w-full bg-[#F2F2F7] animate-pulse rounded-2xl"></div>
+                            ) : (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={[
+                                                { name: 'Em Dia', value: riscoData?.carteiraPorRisco?.emDia?.valorNumerico, color: '#34C759' },
+                                                { name: '1-7 Dias', value: riscoData?.carteiraPorRisco?.atrasados1a7Dias?.valorNumerico, color: '#FFCC00' },
+                                                { name: '8-30 Dias', value: riscoData?.carteiraPorRisco?.atrasados8a30Dias?.valorNumerico, color: '#FF9500' },
+                                                { name: '30+ Dias', value: riscoData?.carteiraPorRisco?.atrasadosMaisDe30Dias?.valorNumerico, color: '#FF3B30' },
+                                                { name: 'Inadimplente', value: riscoData?.carteiraPorRisco?.inadimplentes?.valorNumerico, color: '#8E8E93' }
+                                            ]}
+                                            innerRadius={60}
+                                            outerRadius={100}
+                                            paddingAngle={5}
+                                            dataKey="value"
+                                        >
+                                            <Cell fill="#34C759" />
+                                            <Cell fill="#FFCC00" />
+                                            <Cell fill="#FF9500" />
+                                            <Cell fill="#FF3B30" />
+                                            <Cell fill="#8E8E93" />
+                                        </Pie>
+                                        <Tooltip contentStyle={{ borderRadius: '14px', border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.1)' }} />
+                                    </PieChart>
+                                </ResponsiveContainer>
                             )}
                         </div>
                     </section>

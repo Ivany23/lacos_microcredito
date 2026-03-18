@@ -100,7 +100,6 @@ export const dashboardService = {
     async getAnaliseEmprestimos(): Promise<any> {
         const token = localStorage.getItem("token");
         const url = `${API_BASE_URL}/dashboard/emprestimos`;
-        console.log(`[API] Chamando Empréstimos: ${url}`);
 
         const response = await fetch(url, {
             headers: {
@@ -109,8 +108,41 @@ export const dashboardService = {
         });
 
         if (!response.ok) {
-            console.error(`[API Error] Falha ao carregar empréstimos: ${response.status}`);
             throw new Error("Falha ao carregar análise de empréstimos");
+        }
+
+        return response.json();
+    },
+
+    async getAnaliseRisco(): Promise<any> {
+        const token = localStorage.getItem("token");
+        const url = `${API_BASE_URL}/dashboard/risco`;
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Falha ao carregar análise de risco");
+        }
+
+        return response.json();
+    },
+
+    async getProjecoesFinanceiras(): Promise<any> {
+        const token = localStorage.getItem("token");
+        const url = `${API_BASE_URL}/dashboard/projecoes`;
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Falha ao carregar projeções financeiras");
         }
 
         return response.json();

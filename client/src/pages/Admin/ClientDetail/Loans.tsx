@@ -110,7 +110,7 @@ function LoanCard({ loan, onDelete, isDeleting }: any) {
 
     const total = Number(loan.valorTotal || 0);
     const pago = Number(loan.valorPago || 0); 
-    const progresso = total > 0 ? (pago / total) * 100 : 0;
+    const progresso = total > 0 ? Math.min((pago / total) * 100, 100) : 0;
 
     return (
         <div className="bg-white p-6 rounded-3xl border border-[#E5E5EA] hover:shadow-lg transition-all group relative overflow-hidden">
