@@ -10,6 +10,21 @@ export interface DashboardData {
             clientesAtivos: number;
             descricao: string;
         };
+        carteiraAtiva: {
+            valor: string;
+            valorNumerico: number;
+            descricao: string;
+        };
+        desembolsoDiario: {
+            valor: string;
+            valorNumerico: number;
+            descricao: string;
+        };
+        taxaReembolso: {
+            valor: string;
+            valorNumerico: number;
+            descricao: string;
+        };
         capitalEmprestado: {
             valor: string;
             valorNumerico: number;
@@ -31,12 +46,11 @@ export interface DashboardData {
             nivel: 'BAIXO' | 'MODERADO' | 'CRITICO';
             descricao: string;
         };
-        penalizacoesPendentes: {
-            quantidade: number;
-            valor: string;
-            valorNumerico: number;
-            descricao: string;
-        };
+    };
+    indicadoresRisco: {
+        par1: { valor: string; percentual: string };
+        par7: { valor: string; percentual: string };
+        par30: { valor: string; percentual: string };
     };
     desempenhoMensal: {
         variacoes: {

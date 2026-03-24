@@ -32,8 +32,6 @@ import {
 } from 'recharts';
 import { AdminLayout } from "@/components/AdminLayout";
 
-import { motion } from "framer-motion";
-
 export default function AdminDashboard() {
     const { user, logout } = useAuth();
     const { toast } = useToast();
@@ -87,31 +85,40 @@ export default function AdminDashboard() {
 
     const cards = data ? [
         {
-            title: "Capital Emprestado",
-            value: data.kpisPrincipais.capitalEmprestado.valor,
+            title: "Carteira Ativa",
+            value: data.kpisPrincipais.carteiraAtiva.valor,
             icon: Wallet,
-            color: "bg-gradient-to-br from-[#007AFF] to-[#00C6FF]",
-            shadow: "shadow-blue-200/50",
-            trend: data.desempenhoMensal.variacoes.emprestimos,
-            label: "Fluxo total"
+            color: "bg-[#007AFF]",
+            shadow: "shadow-blue-100",
+            trend: { valor: 0, tendencia: 'estavel' },
+            label: "Capital na rua"
         },
         {
-            title: "Lucro Realizado",
-            value: data.kpisPrincipais.lucroRealizado.valor,
-            icon: TrendingUp,
-            color: "bg-gradient-to-br from-[#34C759] to-[#30D158]",
-            shadow: "shadow-emerald-200/50",
-            trend: data.desempenhoMensal.variacoes.pagamentos,
-            label: "Margem de 20%"
+            title: "Desembolso Diário",
+            value: data.kpisPrincipais.desembolsoDiario.valor,
+            icon: Clock,
+            color: "bg-[#5856D6]",
+            shadow: "shadow-indigo-100",
+            trend: { valor: 0, tendencia: 'estavel' },
+            label: "Hoje"
         },
         {
-            title: "Risco da Carteira",
-            value: data.kpisPrincipais.taxaInadimplencia.valor,
+            title: "Taxa Reembolso",
+            value: data.kpisPrincipais.taxaReembolso.valor,
+            icon: Activity,
+            color: "bg-[#34C759]",
+            shadow: "shadow-emerald-100",
+            trend: { valor: 0, tendencia: 'estavel' },
+            label: "Recuperação"
+        },
+        {
+            title: "Risco PAR 30+",
+            value: data.indicadoresRisco.par30.percentual,
             icon: ShieldAlert,
-            color: data.kpisPrincipais.taxaInadimplencia.nivel === 'BAIXO' ? "bg-gradient-to-br from-[#32D74B] to-[#28CD41]" : "bg-gradient-to-br from-[#FF3B30] to-[#FF453A]",
-            shadow: data.kpisPrincipais.taxaInadimplencia.nivel === 'BAIXO' ? "shadow-emerald-100/50" : "shadow-rose-200/50",
+            color: data.kpisPrincipais.taxaInadimplencia.nivel === 'BAIXO' ? "bg-[#32D74B]" : "bg-[#FF3B30]",
+            shadow: data.kpisPrincipais.taxaInadimplencia.nivel === 'BAIXO' ? "shadow-emerald-50" : "shadow-rose-100",
             status: data.kpisPrincipais.taxaInadimplencia.nivel,
-            label: "Taxa de atraso"
+            label: "Atraso crítico"
         }
     ] : [];
 
@@ -126,85 +133,29 @@ export default function AdminDashboard() {
         { name: 'Inadimplentes', value: emprestimosData.porStatus.inadimplentes.quantidade, color: '#FF3B30' }
     ] : [];
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                type: "spring",
-                stiffness: 100
-            }
-        }
-    };
-
     return (
         <AdminLayout title="Dashboard">
-            <motion.div 
-                initial="hidden"
-                animate="visible"
-                variants={containerVariants}
-                className="space-y-8"
-            >
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                    <div className="space-y-1">
-                        <motion.h2 
-                            variants={itemVariants}
-                            className="text-[34px] font-[900] text-[#1C1C1E] tracking-tight leading-tight"
-                        >
-                            Dashboard
-                        </motion.h2>
-                        <motion.p 
-                            variants={itemVariants}
-                            className="text-[#8E8E93] font-semibold text-sm"
-                        >
-                            Resumo operacional em tempo real
-                        </motion.p>
-                    </div>
-
-                    <motion.div 
-                        variants={itemVariants}
-                        className="flex items-center p-1 bg-[#F2F2F7] rounded-2xl border border-[#E5E5EA]"
-                    >
-                        {['7D', '30D', '90D', 'TUDO'].map((period) => (
-                            <button 
-                                key={period}
-                                className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
-                                    period === '30D' ? 'bg-white shadow-sm text-[#007AFF]' : 'text-[#8E8E93] hover:text-[#1C1C1E]'
-                                }`}
-                            >
-                                {period}
-                            </button>
-                        ))}
-                    </motion.div>
+            <div className="space-y-8">
+                <div className="space-y-1">
+                    <h2 className="text-[34px] font-[900] text-[#1C1C1E] tracking-tight leading-tight">
+                        Dashboard
+                    </h2>
+                    <p className="text-[#8E8E93] font-semibold text-sm">
+                        Resumo operacional em tempo real
+                    </p>
                 </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                     {isLoading ? (
-                        Array(3).fill(0).map((_, i) => (
+                        Array(4).fill(0).map((_, i) => (
                             <div key={i} className="h-[200px] bg-white rounded-[36px] border border-[#E5E5EA] animate-pulse"></div>
                         ))
                     ) : (
                         cards.map((card, i) => (
-                            <motion.div 
-                                key={i} 
-                                variants={itemVariants}
-                                whileHover={{ y: -8, scale: 1.01 }}
-                                className="group relative bg-white p-7 rounded-[36px] border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_48px_rgba(0,0,0,0.1)] transition-all duration-300 overflow-hidden cursor-default"
-                            >
+                            <div key={i} className="group relative bg-white p-7 rounded-[36px] border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_48px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden">
                                 <div className="relative z-10 flex flex-col h-full">
                                     <div className="flex justify-between items-start mb-auto">
-                                        <div className={`w-12 h-12 ${card.color} rounded-[16px] flex items-center justify-center shadow-lg ${card.shadow} group-hover:scale-110 transition-transform`}>
+                                        <div className={`w-12 h-12 ${card.color} rounded-[16px] flex items-center justify-center shadow-lg ${card.shadow}`}>
                                             <card.icon className="w-6 h-6 text-white" />
                                         </div>
                                         {card.trend && (
@@ -217,7 +168,7 @@ export default function AdminDashboard() {
                                         )}
                                     </div>
                                     <div className="mt-8">
-                                        <p className="text-[#8E8E93] text-[13px] font-[800] uppercase tracking-wider mb-1 opacity-70 group-hover:opacity-100 transition-opacity">{card.title}</p>
+                                        <p className="text-[#8E8E93] text-[13px] font-[800] uppercase tracking-wider mb-1">{card.title}</p>
                                         <h2 className="text-[32px] font-[900] text-[#1C1C1E] tracking-tight">{card.value}</h2>
                                         <div className="flex items-center gap-2 mt-2">
                                             <span className="text-[#AEAEB2] text-xs font-bold">{card.label}</span>
@@ -230,16 +181,14 @@ export default function AdminDashboard() {
                                         </div>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
                         ))
                     )}
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                    <motion.section 
-                        variants={itemVariants}
-                        className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] transition-shadow duration-500"
-                    >
+                    {}
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
                                 <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
@@ -264,30 +213,15 @@ export default function AdminDashboard() {
                                         <CartesianGrid vertical={false} stroke="#F2F2F7" strokeDasharray="3 3" />
                                         <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#8E8E93', fontSize: 12, fontWeight: 700 }} dy={10} />
                                         <YAxis hide />
-                                        <Tooltip 
-                                            contentStyle={{ 
-                                                borderRadius: '20px', 
-                                                border: 'none', 
-                                                boxShadow: '0 20px 40px rgba(0,0,0,0.1)', 
-                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                backdropFilter: 'blur(10px)',
-                                                fontWeight: 900, 
-                                                fontSize: '14px',
-                                                padding: '12px 16px'
-                                            }} 
-                                            cursor={{ stroke: '#5856D6', strokeWidth: 2, strokeDasharray: '4 4' }} 
-                                        />
+                                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 8px 32px rgba(0,0,0,0.1)', fontWeight: 900, fontSize: '14px' }} cursor={{ stroke: '#5856D6', strokeWidth: 2, strokeDasharray: '4 4' }} />
                                         <Area type="monotone" dataKey="valor" stroke="#5856D6" strokeWidth={4} fillOpacity={1} fill="url(#colorVal)" animationDuration={1500} />
                                     </AreaChart>
                                 </ResponsiveContainer>
                             )}
                         </div>
-                    </motion.section>
+                    </section>
 
-                    <motion.section 
-                        variants={itemVariants}
-                        className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] transition-shadow duration-500"
-                    >
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
                                 <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
@@ -305,17 +239,7 @@ export default function AdminDashboard() {
                                     <BarChart data={loanStatsData} margin={{ left: -20, right: 20, top: 20, bottom: 0 }}>
                                         <CartesianGrid vertical={false} stroke="#F2F2F7" />
                                         <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#1C1C1E', fontSize: 12, fontWeight: 800 }} />
-                                        <Tooltip 
-                                            cursor={{ fill: '#F2F2F7', radius: 12 }} 
-                                            contentStyle={{ 
-                                                borderRadius: '20px', 
-                                                border: 'none', 
-                                                boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                backdropFilter: 'blur(10px)',
-                                                padding: '12px 16px'
-                                            }} 
-                                        />
+                                        <Tooltip cursor={{ fill: '#F2F2F7' }} contentStyle={{ borderRadius: '14px', border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.1)' }} />
                                         <Bar dataKey="value" radius={[12, 12, 12, 12]} barSize={50}>
                                             {loanStatsData.map((entry: any, index: number) => (
                                                 <Cell key={`cell-${index}`} fill={entry.color} />
@@ -325,12 +249,10 @@ export default function AdminDashboard() {
                                 </ResponsiveContainer>
                             )}
                         </div>
-                    </motion.section>
+                    </section>
 
-                    <motion.section 
-                        variants={itemVariants}
-                        className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
-                    >
+                    {}
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
                                 <Clock className="w-6 h-6 text-[#FF9500]" />
@@ -343,12 +265,9 @@ export default function AdminDashboard() {
 
                         {data ? (
                             <div className="space-y-4">
-                                <motion.div 
-                                    whileHover={{ x: 8 }}
-                                    className="p-5 bg-gradient-to-r from-[#FFF2F2] to-white rounded-[28px] border border-[#FFD5D5] flex items-center justify-between group transition-all cursor-pointer"
-                                >
+                                <div className="p-5 bg-[#FFF2F2] rounded-[28px] border border-[#FFD5D5] flex items-center justify-between group transition-all hover:translate-x-1 cursor-pointer">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
                                             <ShieldAlert className="w-6 h-6 text-[#FF3B30]" />
                                         </div>
                                         <div>
@@ -363,14 +282,11 @@ export default function AdminDashboard() {
                                         </div>
                                         <ChevronRight className="w-5 h-5 text-[#FF3B30] opacity-30 group-hover:opacity-100" />
                                     </div>
-                                </motion.div>
+                                </div>
 
-                                <motion.div 
-                                    whileHover={{ x: 8 }}
-                                    className="p-5 bg-gradient-to-r from-[#FFF9E6] to-white rounded-[28px] border border-[#FFE8A3] flex items-center justify-between group transition-all cursor-pointer"
-                                >
+                                <div className="p-5 bg-[#FFF9E6] rounded-[28px] border border-[#FFE8A3] flex items-center justify-between group transition-all hover:translate-x-1 cursor-pointer">
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                                        <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
                                             <AlertCircle className="w-6 h-6 text-[#FF9500]" />
                                         </div>
                                         <div>
@@ -385,54 +301,47 @@ export default function AdminDashboard() {
                                         </div>
                                         <ChevronRight className="w-5 h-5 text-[#FF9500] opacity-30 group-hover:opacity-100" />
                                     </div>
-                                </motion.div>
+                                </div>
                             </div>
                         ) : (
                             <div className="h-[150px] flex items-center justify-center text-[#C7C7CC] font-bold uppercase tracking-widest text-xs">A carregar alertas...</div>
                         )}
-                    </motion.section>
+                    </section>
 
-                    <motion.section 
-                        variants={itemVariants}
-                        className="bg-[#1C1C1E] rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl group"
-                    >
-                        <div className="absolute top-0 right-0 w-80 h-80 bg-[#5856D6] opacity-[0.2] rounded-full blur-[100px] -mr-40 -mt-40 group-hover:opacity-[0.3] transition-opacity duration-700"></div>
+                    {}
+                    <section className="bg-[#1C1C1E] rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl">
+                        <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3B30] opacity-[0.1] rounded-full blur-[100px] -mr-40 -mt-40"></div>
                         <div className="relative z-10 flex flex-col h-full">
                             <h3 className="text-xl font-[900] mb-8 flex items-center gap-2">
-                                <Users className="w-6 h-6 text-[#007AFF]" />
-                                Indicadores de Expansão
+                                <ShieldAlert className="w-6 h-6 text-[#FF3B30]" />
+                                Monitoramento de Risco PAR
                             </h3>
 
                             {data ? (
-                                <div className="space-y-8 flex-1">
-                                    <div className="grid grid-cols-2 gap-6">
-                                        <div className="p-6 bg-white/[0.05] border border-white/10 rounded-[28px] group-hover:bg-white/10 transition-all">
-                                            <p className="text-white/40 text-[10px] font-black uppercase tracking-[2px] mb-2">Total Clientes</p>
-                                            <p className="text-[36px] font-black tracking-tighter leading-none">{data.kpisPrincipais.totalClientes.valor}</p>
-                                            <div className="flex items-center gap-1 mt-3">
-                                                <TrendingUp className="w-3 h-3 text-[#32D74B]" />
-                                                <span className="text-[#32D74B] text-[10px] font-black">ACTIVE GROWTH</span>
+                                <div className="space-y-6 flex-1">
+                                    <div className="space-y-4">
+                                        <div className="p-5 bg-white/[0.03] border border-white/5 rounded-[24px] hover:bg-white/10 transition-all">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <span className="text-white/40 text-[10px] font-black uppercase tracking-[2px]">PAR 1+ Dia (Atraso)</span>
+                                                <span className="text-[#FFCC00] text-xs font-black">{data.indicadoresRisco.par1.percentual}</span>
                                             </div>
+                                            <p className="text-2xl font-black">{data.indicadoresRisco.par1.valor}</p>
                                         </div>
-                                        <div className="p-6 bg-white/[0.05] border border-white/10 rounded-[28px] group-hover:bg-white/10 transition-all">
-                                            <p className="text-white/40 text-[10px] font-black uppercase tracking-[2px] mb-2">Micro-créditos</p>
-                                            <p className="text-[36px] font-black tracking-tighter leading-none text-[#007AFF]">{data.kpisPrincipais.totalClientes.clientesAtivos}</p>
-                                            <p className="text-white/40 text-[10px] font-bold mt-3 uppercase">Contratos Vigentes</p>
+                                        
+                                        <div className="p-5 bg-white/[0.03] border border-white/5 rounded-[24px] hover:bg-white/10 transition-all">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <span className="text-white/40 text-[10px] font-black uppercase tracking-[2px]">PAR 7+ Dias</span>
+                                                <span className="text-[#FF9500] text-xs font-black">{data.indicadoresRisco.par7.percentual}</span>
+                                            </div>
+                                            <p className="text-2xl font-black">{data.indicadoresRisco.par7.valor}</p>
                                         </div>
-                                    </div>
 
-                                    <div className="mt-auto pt-4">
-                                        <div className="flex items-center justify-between text-[11px] font-black tracking-widest uppercase mb-3 text-white/70">
-                                            <span>Estabilidade do Sistema</span>
-                                            <span className="text-[#32D74B]">94.8% Eficiência</span>
-                                        </div>
-                                        <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden p-[2px]">
-                                            <motion.div 
-                                                initial={{ width: 0 }}
-                                                animate={{ width: '94.8%' }}
-                                                transition={{ duration: 2, delay: 0.5 }}
-                                                className="h-full bg-gradient-to-r from-[#007AFF] to-[#32D74B] rounded-full shadow-[0_0_15px_rgba(50,215,75,0.4)]"
-                                            ></motion.div>
+                                        <div className="p-5 bg-white/5 border border-white/10 rounded-[24px] hover:bg-white/10 transition-all">
+                                            <div className="flex justify-between items-center mb-2">
+                                                <span className="text-white/40 text-[10px] font-black uppercase tracking-[2px]">PAR 30+ Dias (Crítico)</span>
+                                                <span className="text-[#FF3B30] text-xs font-black">{data.indicadoresRisco.par30.percentual}</span>
+                                            </div>
+                                            <p className="text-2xl font-black text-[#FF3B30]">{data.indicadoresRisco.par30.valor}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -440,15 +349,11 @@ export default function AdminDashboard() {
                                 <div className="flex-1 flex items-center justify-center text-white/20 uppercase font-black tracking-widest text-xs">Sincronizando...</div>
                             )}
                         </div>
-                    </motion.section>
+                    </section>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
-                    <motion.section 
-                        variants={itemVariants}
-                        whileHover={{ y: -4 }}
-                        className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-500"
-                    >
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
                                 <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
@@ -458,7 +363,7 @@ export default function AdminDashboard() {
                                 <p className="text-[#8E8E93] text-sm font-semibold ml-8">Próximos 3 meses (Estimativa)</p>
                             </div>
                         </div>
-                        <div className="h-[400px] w-full mt-4 -ml-4">
+                        <div className="h-[300px] w-full mt-4 -ml-4">
                             {isLoading ? (
                                 <div className="h-full w-full bg-[#F2F2F7] animate-pulse rounded-2xl"></div>
                             ) : (
@@ -468,20 +373,10 @@ export default function AdminDashboard() {
                                         { name: projecoesData?.projecaoArrecadacao?.mes2?.periodo, valor: projecoesData?.projecaoArrecadacao?.mes2?.valorNumerico, color: '#007AFF' },
                                         { name: projecoesData?.projecaoArrecadacao?.mes3?.periodo, valor: projecoesData?.projecaoArrecadacao?.mes3?.valorNumerico, color: '#5856D6' }
                                     ]}>
-                                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#8E8E93', fontSize: 13, fontWeight: 700 }} />
+                                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#8E8E93', fontSize: 10, fontWeight: 700 }} />
                                         <YAxis hide />
-                                        <Tooltip 
-                                            cursor={{ fill: '#F2F2F7', radius: 12 }} 
-                                            contentStyle={{ 
-                                                borderRadius: '20px', 
-                                                border: 'none', 
-                                                boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
-                                                background: 'rgba(255, 255, 255, 0.95)',
-                                                backdropFilter: 'blur(10px)',
-                                                padding: '12px 16px'
-                                            }} 
-                                        />
-                                        <Bar dataKey="valor" radius={[12, 12, 12, 12]} barSize={60}>
+                                        <Tooltip cursor={{ fill: '#F2F2F7' }} contentStyle={{ borderRadius: '14px', border: 'none', boxShadow: '0 8px 30px rgba(0,0,0,0.1)' }} />
+                                        <Bar dataKey="valor" radius={[12, 12, 12, 12]} barSize={40}>
                                             <Cell fill="#34C759" opacity={0.6} />
                                             <Cell fill="#007AFF" opacity={0.8} />
                                             <Cell fill="#5856D6" />
@@ -490,20 +385,19 @@ export default function AdminDashboard() {
                                 </ResponsiveContainer>
                             )}
                         </div>
-                    </motion.section>
+                    </section>
+
+
                 </div>
 
-                <motion.footer 
-                    variants={itemVariants}
-                    className="flex justify-center pt-8"
-                >
+                <footer className="flex justify-center pt-8">
                     <div className="px-6 py-3 bg-white/80 backdrop-blur-xl border border-white/50 rounded-2xl flex items-center gap-3 shadow-xl shadow-slate-200">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#32D74B]" />
                         <span className="text-[#8E8E93] text-[10px] font-[800] uppercase tracking-[2px]">Lacos Admin • Integridade de Dados Verificada</span>
                         {data && <span className="text-[#AEAEB2] text-[10px] font-bold border-l border-[#E5E5EA] pl-3">Sync: {new Date(data.dataGeracao).toLocaleTimeString()}</span>}
                     </div>
-                </motion.footer>
-            </motion.div>
+                </footer>
+            </div>
         </AdminLayout>
     );
 }
