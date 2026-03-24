@@ -89,8 +89,9 @@ export default function AdminDashboard() {
             value: data.kpisPrincipais.totalClientes.valor,
             icon: Users,
             color: "bg-[#007AFF]",
-            shadow: "shadow-blue-100",
-            trend: { valor: 0, tendencia: 'estavel' },
+            bgGradient: "from-[#007AFF08] to-white",
+            shadow: "shadow-[#007AFF15]",
+            accent: "#007AFF",
             label: "Base total"
         },
         {
@@ -98,17 +99,19 @@ export default function AdminDashboard() {
             value: data.kpisPrincipais.carteiraAtiva.valor,
             icon: Wallet,
             color: "bg-[#5856D6]",
-            shadow: "shadow-indigo-100",
-            trend: { valor: 0, tendencia: 'estavel' },
-            label: "Capital na rua"
+            bgGradient: "from-[#5856D608] to-white",
+            shadow: "shadow-[#5856D615]",
+            accent: "#5856D6",
+            label: "Saldo real na rua"
         },
         {
             title: "Desembolso Diário",
             value: data.kpisPrincipais.desembolsoDiario.valor,
             icon: Clock,
             color: "bg-[#FF9500]",
-            shadow: "shadow-orange-100",
-            trend: { valor: 0, tendencia: 'estavel' },
+            bgGradient: "from-[#FF950008] to-white",
+            shadow: "shadow-[#FF950015]",
+            accent: "#FF9500",
             label: "Hoje"
         },
         {
@@ -116,18 +119,10 @@ export default function AdminDashboard() {
             value: data.kpisPrincipais.taxaReembolso.valor,
             icon: Activity,
             color: "bg-[#34C759]",
-            shadow: "shadow-emerald-100",
-            trend: { valor: 0, tendencia: 'estavel' },
+            bgGradient: "from-[#34C75908] to-white",
+            shadow: "shadow-[#34C75915]",
+            accent: "#34C759",
             label: "Recuperação"
-        },
-        {
-            title: "Risco PAR 30+",
-            value: data.indicadoresRisco.par30.percentual,
-            icon: ShieldAlert,
-            color: data.kpisPrincipais.taxaInadimplencia.nivel === 'BAIXO' ? "bg-[#32D74B]" : "bg-[#FF3B30]",
-            shadow: data.kpisPrincipais.taxaInadimplencia.nivel === 'BAIXO' ? "shadow-emerald-50" : "shadow-rose-100",
-            status: data.kpisPrincipais.taxaInadimplencia.nivel,
-            label: "Atraso crítico"
         }
     ] : [];
 
@@ -154,26 +149,25 @@ export default function AdminDashboard() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
                     {isLoading ? (
-                        Array(5).fill(0).map((_, i) => (
+                        Array(4).fill(0).map((_, i) => (
                             <div key={i} className="h-[200px] bg-white rounded-[36px] border border-[#E5E5EA] animate-pulse"></div>
                         ))
                     ) : (
                         cards.map((card, i) => (
-                            <div key={i} className="group relative bg-white p-7 rounded-[36px] border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_48px_rgba(0,0,0,0.08)] transition-all duration-500 overflow-hidden">
-                                <div className="relative z-10 flex flex-col h-full">
-                                    <div className="flex justify-between items-start mb-auto">
-                                        <div className={`w-12 h-12 ${card.color} rounded-[16px] flex items-center justify-center shadow-lg ${card.shadow}`}>
-                                            <card.icon className="w-6 h-6 text-white" />
+                            <div key={i} className={`group relative bg-white p-6 rounded-[24px] border border-[#F2F2F7] shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500 overflow-hidden`}>
+                                <div className="absolute left-0 top-0 bottom-0 w-[4px]" style={{ backgroundColor: card.accent }}></div>
+                                <div className="relative z-10 flex flex-col gap-4">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-10 h-10 ${card.color} rounded-xl flex items-center justify-center shadow-sm opacity-90`}>
+                                            <card.icon className="w-5 h-5 text-white" />
                                         </div>
+                                        <p className="text-[#8E8E93] text-[11px] font-[800] uppercase tracking-[1.5px]">{card.title}</p>
                                     </div>
-                                    <div className="mt-8">
-                                        <p className="text-[#8E8E93] text-[13px] font-[800] uppercase tracking-wider mb-1">{card.title}</p>
-                                        <h2 className="text-[32px] font-[900] text-[#1C1C1E] tracking-tight">{card.value}</h2>
-                                        <div className="flex items-center gap-2 mt-2">
-                                            <span className="text-[#AEAEB2] text-xs font-bold">{card.label}</span>
-                                        </div>
+                                    <div className="space-y-1">
+                                        <h2 className="text-[26px] font-[900] text-[#1C1C1E] tracking-tight">{card.value}</h2>
+                                        <p className="text-[#AEAEB2] text-[10px] font-bold uppercase tracking-wide">{card.label}</p>
                                     </div>
                                 </div>
                             </div>
@@ -185,10 +179,17 @@ export default function AdminDashboard() {
                     <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
-                                <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
-                                    <TrendingUp className="w-6 h-6 text-[#34C759]" />
-                                    Lucros Totais da Empresa
-                                </h3>
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
+                                        <TrendingUp className="w-6 h-6 text-[#34C759]" />
+                                        Lucros Totais da Empresa
+                                    </h3>
+                                    {!isLoading && data && (
+                                        <div className="px-3 py-1 bg-[#34C75915] border border-[#34C75920] rounded-full">
+                                            <span className="text-[#34C759] text-[13px] font-[900] tracking-tight">TOTAL: {data.kpisPrincipais.lucroRealizado.valor}</span>
+                                        </div>
+                                    )}
+                                </div>
                                 <p className="text-[#8E8E93] text-sm font-semibold ml-8">Evolução do lucro real mensal (Estimativa)</p>
                             </div>
                         </div>
