@@ -85,11 +85,20 @@ export default function AdminDashboard() {
 
     const cards = data ? [
         {
+            title: "Total Clientes",
+            value: data.kpisPrincipais.totalClientes.valor,
+            icon: Users,
+            color: "bg-[#007AFF]",
+            shadow: "shadow-blue-100",
+            trend: { valor: 0, tendencia: 'estavel' },
+            label: "Base total"
+        },
+        {
             title: "Carteira Ativa",
             value: data.kpisPrincipais.carteiraAtiva.valor,
             icon: Wallet,
-            color: "bg-[#007AFF]",
-            shadow: "shadow-blue-100",
+            color: "bg-[#5856D6]",
+            shadow: "shadow-indigo-100",
             trend: { valor: 0, tendencia: 'estavel' },
             label: "Capital na rua"
         },
@@ -97,8 +106,8 @@ export default function AdminDashboard() {
             title: "Desembolso Diário",
             value: data.kpisPrincipais.desembolsoDiario.valor,
             icon: Clock,
-            color: "bg-[#5856D6]",
-            shadow: "shadow-indigo-100",
+            color: "bg-[#FF9500]",
+            shadow: "shadow-orange-100",
             trend: { valor: 0, tendencia: 'estavel' },
             label: "Hoje"
         },
@@ -145,9 +154,9 @@ export default function AdminDashboard() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
                     {isLoading ? (
-                        Array(4).fill(0).map((_, i) => (
+                        Array(5).fill(0).map((_, i) => (
                             <div key={i} className="h-[200px] bg-white rounded-[36px] border border-[#E5E5EA] animate-pulse"></div>
                         ))
                     ) : (
@@ -158,26 +167,12 @@ export default function AdminDashboard() {
                                         <div className={`w-12 h-12 ${card.color} rounded-[16px] flex items-center justify-center shadow-lg ${card.shadow}`}>
                                             <card.icon className="w-6 h-6 text-white" />
                                         </div>
-                                        {card.trend && (
-                                            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black ${card.trend.tendencia === 'alta' ? 'bg-[#EAF9EE] text-[#248A3D]' :
-                                                    card.trend.tendencia === 'baixa' ? 'bg-[#FEEBEC] text-[#D1272F]' : 'bg-[#F2F2F7] text-[#636366]'
-                                                }`}>
-                                                {card.trend.tendencia === 'alta' ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                                                {Math.abs(card.trend.valor)}%
-                                            </div>
-                                        )}
                                     </div>
                                     <div className="mt-8">
                                         <p className="text-[#8E8E93] text-[13px] font-[800] uppercase tracking-wider mb-1">{card.title}</p>
                                         <h2 className="text-[32px] font-[900] text-[#1C1C1E] tracking-tight">{card.value}</h2>
                                         <div className="flex items-center gap-2 mt-2">
                                             <span className="text-[#AEAEB2] text-xs font-bold">{card.label}</span>
-                                            {card.status && (
-                                                <span className={`text-[10px] font-black tracking-widest px-2 py-0.5 rounded-md ${card.status === 'BAIXO' ? 'bg-[#E3F2FD] text-[#007AFF]' : 'bg-[#FFF3E0] text-[#FF9500]'
-                                                    }`}>
-                                                    {card.status}
-                                                </span>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -187,7 +182,39 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                    {}
+                    <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="space-y-1">
+                                <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
+                                    <TrendingUp className="w-6 h-6 text-[#34C759]" />
+                                    Lucros Totais da Empresa
+                                </h3>
+                                <p className="text-[#8E8E93] text-sm font-semibold ml-8">Evolução do lucro real mensal (Estimativa)</p>
+                            </div>
+                        </div>
+                        <div className="h-[300px] w-full mt-4 -ml-4">
+                            {isLoading ? (
+                                <div className="h-full w-full bg-[#F2F2F7] animate-pulse rounded-2xl"></div>
+                            ) : (
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <AreaChart data={cashFlowData.map((d: any) => ({ ...d, lucro: (d.valor || 0) * 0.2 }))}>
+                                        <defs>
+                                            <linearGradient id="colorLucro" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#34C759" stopOpacity={0.15} />
+                                                <stop offset="95%" stopColor="#34C759" stopOpacity={0} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid vertical={false} stroke="#F2F2F7" />
+                                        <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#8E8E93', fontSize: 10, fontWeight: 700 }} />
+                                        <YAxis hide />
+                                        <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 8px 32px rgba(0,0,0,0.1)' }} />
+                                        <Area type="monotone" dataKey="lucro" stroke="#34C759" strokeWidth={4} fillOpacity={1} fill="url(#colorLucro)" />
+                                    </AreaChart>
+                                </ResponsiveContainer>
+                            )}
+                        </div>
+                    </section>
+
                     <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)] overflow-hidden">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
@@ -220,7 +247,9 @@ export default function AdminDashboard() {
                             )}
                         </div>
                     </section>
+                </div>
 
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
@@ -251,7 +280,6 @@ export default function AdminDashboard() {
                         </div>
                     </section>
 
-                    {}
                     <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <h3 className="text-xl font-[900] text-[#1C1C1E] flex items-center gap-2">
@@ -307,8 +335,9 @@ export default function AdminDashboard() {
                             <div className="h-[150px] flex items-center justify-center text-[#C7C7CC] font-bold uppercase tracking-widest text-xs">A carregar alertas...</div>
                         )}
                     </section>
+                </div>
 
-                    {}
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <section className="bg-[#1C1C1E] rounded-[40px] p-8 text-white relative overflow-hidden shadow-2xl">
                         <div className="absolute top-0 right-0 w-80 h-80 bg-[#FF3B30] opacity-[0.1] rounded-full blur-[100px] -mr-40 -mt-40"></div>
                         <div className="relative z-10 flex flex-col h-full">
@@ -350,9 +379,7 @@ export default function AdminDashboard() {
                             )}
                         </div>
                     </section>
-                </div>
 
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
                     <section className="bg-white rounded-[40px] p-8 border border-[#E5E5EA] shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                         <div className="flex items-center justify-between mb-8">
                             <div className="space-y-1">
@@ -386,8 +413,6 @@ export default function AdminDashboard() {
                             )}
                         </div>
                     </section>
-
-
                 </div>
 
                 <footer className="flex justify-center pt-8">
