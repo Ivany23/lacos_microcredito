@@ -114,23 +114,6 @@ export const dashboardService = {
         return response.json();
     },
 
-    async getAnaliseRisco(): Promise<any> {
-        const token = localStorage.getItem("token");
-        const url = `${API_BASE_URL}/dashboard/risco`;
-
-        const response = await fetch(url, {
-            headers: {
-                "Authorization": `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error("Falha ao carregar análise de risco");
-        }
-
-        return response.json();
-    },
-
     async getProjecoesFinanceiras(): Promise<any> {
         const token = localStorage.getItem("token");
         const url = `${API_BASE_URL}/dashboard/projecoes`;
