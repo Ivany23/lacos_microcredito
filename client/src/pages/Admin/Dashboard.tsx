@@ -149,25 +149,24 @@ export default function AdminDashboard() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     {isLoading ? (
                         Array(4).fill(0).map((_, i) => (
-                            <div key={i} className="h-[200px] bg-white rounded-[36px] border border-[#E5E5EA] animate-pulse"></div>
+                            <div key={i} className="h-[140px] bg-white rounded-[28px] border border-[#F2F2F7] animate-pulse"></div>
                         ))
                     ) : (
                         cards.map((card, i) => (
-                            <div key={i} className={`group relative bg-white p-6 rounded-[24px] border border-[#F2F2F7] shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] hover:-translate-y-1 transition-all duration-500 overflow-hidden`}>
-                                <div className="absolute left-0 top-0 bottom-0 w-[4px]" style={{ backgroundColor: card.accent }}></div>
-                                <div className="relative z-10 flex flex-col gap-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-10 h-10 ${card.color} rounded-xl flex items-center justify-center shadow-sm opacity-90`}>
-                                            <card.icon className="w-5 h-5 text-white" />
-                                        </div>
-                                        <p className="text-[#8E8E93] text-[11px] font-[800] uppercase tracking-[1.5px]">{card.title}</p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <h2 className="text-[26px] font-[900] text-[#1C1C1E] tracking-tight">{card.value}</h2>
-                                        <p className="text-[#AEAEB2] text-[10px] font-bold uppercase tracking-wide">{card.label}</p>
+                            <div key={i} className={`group relative bg-white min-h-[145px] p-5 rounded-[28px] border border-[#F2F2F7] shadow-[0_2px_14px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:scale-[1.02] transition-all duration-500 overflow-hidden`}>
+                                <div className="absolute left-0 top-0 bottom-0 w-[4.5px] opacity-[0.9]" style={{ backgroundColor: card.accent }}></div>
+                                <div className={`absolute top-4 right-4 w-10 h-10 ${card.color} rounded-[14px] flex items-center justify-center shadow-md transform transition-all duration-500 group-hover:rotate-6 group-hover:scale-110`}>
+                                    <card.icon className="w-5 h-5 text-white" />
+                                </div>
+                                <div className="flex flex-col h-full justify-end">
+                                    <p className="text-[#8E8E93] text-[10px] font-black uppercase tracking-[1.2px] mb-1 opacity-80">{card.title}</p>
+                                    <h2 className="text-[24px] font-black text-[#1C1C1E] tracking-tight leading-tight">{card.value}</h2>
+                                    <div className="flex items-center gap-1.5 mt-2">
+                                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: card.accent }}></div>
+                                        <span className="text-[#AEAEB2] text-[9.5px] font-black uppercase tracking-wider">{card.label}</span>
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +192,7 @@ export default function AdminDashboard() {
                                 <p className="text-[#8E8E93] text-sm font-semibold ml-8">Evolução do lucro real mensal (Estimativa)</p>
                             </div>
                         </div>
-                        <div className="h-[300px] w-full mt-4 -ml-4">
+                        <div className="h-[220px] w-full mt-4 -ml-4">
                             {isLoading ? (
                                 <div className="h-full w-full bg-[#F2F2F7] animate-pulse rounded-2xl"></div>
                             ) : (
@@ -226,7 +225,7 @@ export default function AdminDashboard() {
                                 <p className="text-[#8E8E93] text-sm font-semibold ml-8">Últimos 6 meses (MZN)</p>
                             </div>
                         </div>
-                        <div className="h-[300px] w-full mt-4 -ml-4">
+                        <div className="h-[220px] w-full mt-4 -ml-4">
                             {isLoading ? (
                                 <div className="h-full w-full bg-[#F2F2F7] animate-pulse rounded-2xl"></div>
                             ) : (
