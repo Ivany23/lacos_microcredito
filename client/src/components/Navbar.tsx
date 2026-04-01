@@ -66,10 +66,10 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center gap-4">
-                <Link href="/profile">
+                <Link href={user.role === 'admin' ? "/admin/dashboard" : "/profile"}>
                   <Button variant="ghost" className="flex items-center gap-2">
                     <User className="w-4 h-4" />
-                    <span>Minha Conta</span>
+                    <span>{user.role === 'admin' ? 'Painel Admin' : 'Minha Conta'}</span>
                   </Button>
                 </Link>
                 <Button variant="outline" onClick={() => logout()}>
@@ -123,8 +123,12 @@ export function Navbar() {
             <div className="pt-4 pb-2 border-t border-gray-100 mt-4">
               {user ? (
                 <>
-                  <Link href="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50" onClick={() => setIsOpen(false)}>
-                    Minha Conta
+                  <Link 
+                    href={user.role === 'admin' ? "/admin/dashboard" : "/profile"} 
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50" 
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {user.role === 'admin' ? 'Painel Admin' : 'Minha Conta'}
                   </Link>
                   <button onClick={() => { logout(); setIsOpen(false); }} className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50">
                     Sair

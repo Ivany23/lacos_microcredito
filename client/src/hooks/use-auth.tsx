@@ -8,6 +8,7 @@ export interface User {
   fullName?: string;
   role?: 'admin' | 'client';
   token?: string;
+  clienteId?: string;
   [key: string]: any;
 }
 
@@ -48,7 +49,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
+        const parsed = JSON.parse(storedUser);
+        // Garantir que clienteId do localStorage também é recuperado
+        if (!parsed.clienteId) {
+          const storedClienteId = localStorage.getItem("clienteId");
+          if (storedClienteId) parsed.clienteId = storedClienteId;
+        }
+        setUser(parsed);
       } catch (e) {
         localStorage.removeItem("user");
       }
@@ -64,6 +71,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       fullName: response.nome || (response.cliente ? response.cliente.nome : (response.username || 'Usuário')),
     };
 
+    // Guardar clienteId para o cliente poder carregar os seus dados
+    if (role === 'client' && response.clienteId) {
+      userData.clienteId = String(response.clienteId);
+    }
+
     if (response.cliente?.email) {
       userData.email = response.cliente.email;
     }
@@ -75,6 +87,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", response.access_token);
+    if (role === 'client' && response.clienteId) {
+      localStorage.setItem("clienteId", String(response.clienteId));
+    }
 
     toast({
       title: "Login realizado com sucesso!",
@@ -165,6 +180,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("clienteId");
     setLocation("/");
     toast({
       title: "Sessão encerrada",
