@@ -7,7 +7,8 @@ import {
     Settings,
     LogOut,
     ChevronRight,
-    Bell
+    Bell,
+    AlertTriangle
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -25,6 +26,7 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
         { icon: Users, label: "Clientes", href: "/admin/clients" },
         { icon: Wallet, label: "Empréstimos", href: "/admin/loans" },
         { icon: Receipt, label: "Pagamentos", href: "/admin/payments" },
+        { icon: AlertTriangle, label: "Penalizações", href: "/admin/penalties" },
         { icon: Settings, label: "Configurações", href: "/admin/settings" },
     ];
 

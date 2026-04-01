@@ -18,6 +18,7 @@ import AdminClients from "@/pages/Admin/Clients";
 import ClientDetail from "@/pages/Admin/ClientDetail/index";
 import AdminLoans from "@/pages/Admin/Loans";
 import AdminPayments from "@/pages/Admin/Payments";
+import AdminPenalties from "./pages/Admin/Penalties";
 import AdminSettings from "@/pages/Admin/Settings";
 import BlogPost1 from "@/pages/BlogPost1";
 import BlogPost2 from "@/pages/BlogPost2";
@@ -54,17 +55,18 @@ function Router() {
             <Route path="/contact" component={Contact} />
             <Route path="/simulator" component={SimulatorPage} />
 
-            {}
+            { }
             <Route path="/login" component={Login} />
             <Route path="/login-admin" component={LoginAdmin} />
 
-            {}
+            { }
             <Route path="/profile" component={Profile} />
             <Route path="/admin/dashboard" component={AdminDashboard} />
             <Route path="/admin/clients" component={AdminClients} />
             <Route path="/admin/clients/:id" component={ClientDetail} />
             <Route path="/admin/loans" component={AdminLoans} />
             <Route path="/admin/payments" component={AdminPayments} />
+            <Route path="/admin/penalties" component={AdminPenalties} />
             <Route path="/admin/settings" component={AdminSettings} />
 
             <Route component={NotFound} />

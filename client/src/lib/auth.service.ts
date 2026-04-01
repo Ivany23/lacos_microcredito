@@ -7,7 +7,7 @@ export interface LoginResponse {
 
 export const authService = {
     async loginAdmin(email: string, senha: string): Promise<LoginResponse> {
-        const url = `${API_BASE_URL}/auth/login/funcionario`;
+        const url = `${API_BASE_URL}/auth/funcionario/login`;
         console.log(`[AuthService] Chamando login administrativo: ${url}`);
 
         const response = await fetch(url, {
@@ -28,7 +28,7 @@ export const authService = {
     },
 
     async loginClient(email: string, senha: string): Promise<LoginResponse> {
-        const url = `${API_BASE_URL}/auth/login`;
+        const url = `${API_BASE_URL}/auth/cliente/login`;
         console.log(`[AuthService] Chamando login do cliente: ${url}`);
 
         const response = await fetch(url, {
