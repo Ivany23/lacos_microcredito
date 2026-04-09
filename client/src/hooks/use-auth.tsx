@@ -96,11 +96,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       description: `Bem-vindo, ${userData.fullName}`,
     });
 
-    if (role === 'admin') {
-      setTimeout(() => setLocation("/admin/dashboard"), 100);
-    } else {
-      setTimeout(() => setLocation("/profile"), 100);
-    }
+    // handleLoginSuccess agora apenas define o usuário e o token.
+    // O redirecionamento é controlado pelos componentes de Login locais.
   };
 
   const loginClient = async (data: LoginData) => {

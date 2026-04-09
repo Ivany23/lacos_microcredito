@@ -1,14 +1,22 @@
 import { Navbar } from "@/components/Navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Shield, Lock, ArrowRight, UserCog } from "lucide-react";
 
 export default function LoginAdmin() {
-    const { loginAdmin, isLoggingIn } = useAuth();
+    const { user, loginAdmin, isLoggingIn } = useAuth();
+    const [, setLocation] = useLocation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        if (user && user.role === 'admin') {
+            setLocation("/admin/dashboard");
+        }
+    }, [user, setLocation]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

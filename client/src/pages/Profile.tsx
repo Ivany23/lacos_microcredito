@@ -24,7 +24,7 @@ export default function Profile() {
 
   // Redireccionamentos de segurança
   if (!user) return <Redirect to="/login" />;
-  if (user.role === "admin") return <Redirect to="/admin/dashboard" />;
+
 
   // O clienteId vem do token JWT (guardado no user pelo auth hook)
   const clienteId = user.clienteId || user.clientId || (user as any).sub;
