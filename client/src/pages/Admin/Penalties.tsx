@@ -74,7 +74,8 @@ export default function AdminPenalties() {
             });
             if (res.ok) {
                 const data = await res.json();
-                setPenalidades(data);
+                // O backend retorna { sucesso: true, resumoGeral: ..., penalizacoes: [...] }
+                setPenalidades(Array.isArray(data.penalizacoes) ? data.penalizacoes : []);
             } else {
                 throw new Error("Erro ao carregar penalizações.");
             }

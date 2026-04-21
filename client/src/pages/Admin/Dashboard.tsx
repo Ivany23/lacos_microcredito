@@ -177,24 +177,31 @@ export default function AdminDashboard() {
                     </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {isLoading ? (
                         Array(4).fill(0).map((_, i) => (
-                            <div key={i} className="h-[140px] bg-white rounded-[28px] border border-[#F2F2F7] animate-pulse"></div>
+                            <div key={i} className="h-[145px] bg-white rounded-[32px] border border-[#F2F2F7] animate-pulse"></div>
                         ))
                     ) : (
                         cards.map((card, i) => (
-                            <div key={i} className={`group relative bg-white min-h-[145px] p-5 rounded-[28px] border border-[#F2F2F7] shadow-[0_2px_14px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.06)] hover:scale-[1.02] transition-all duration-500 overflow-hidden`}>
-                                <div className="absolute left-0 top-0 bottom-0 w-[4.5px] opacity-[0.9]" style={{ backgroundColor: card.accent }}></div>
-                                <div className={`absolute top-4 right-4 w-10 h-10 ${card.color} rounded-[14px] flex items-center justify-center shadow-md transform transition-all duration-500 group-hover:rotate-6 group-hover:scale-110`}>
-                                    <card.icon className="w-5 h-5 text-white" />
+                            <div key={i} className={`group relative bg-white min-h-[145px] p-6 rounded-[32px] border border-[#E5E5EA] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden`}>
+                                {/* Large Background Icon effect like Penalties screen */}
+                                <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                    <card.icon className={`w-32 h-32 ${card.color.replace('bg-', 'text-')}`} />
                                 </div>
-                                <div className="flex flex-col h-full justify-end">
-                                    <p className="text-[#8E8E93] text-[10px] font-black uppercase tracking-[1.2px] mb-1 opacity-80">{card.title}</p>
-                                    <h2 className="text-[24px] font-black text-[#1C1C1E] tracking-tight leading-tight">{card.value}</h2>
-                                    <div className="flex items-center gap-1.5 mt-2">
-                                        <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: card.accent }}></div>
-                                        <span className="text-[#AEAEB2] text-[9.5px] font-black uppercase tracking-wider">{card.label}</span>
+                                
+                                <div className="flex flex-col h-full relative z-10">
+                                    <div className={`w-12 h-12 ${card.color} rounded-2xl flex items-center justify-center shadow-lg transform transition-all duration-500 group-hover:scale-110 mb-4`}>
+                                        <card.icon className="w-6 h-6 text-white" />
+                                    </div>
+                                    
+                                    <div>
+                                        <p className="text-[#8E8E93] text-[10px] font-black uppercase tracking-[0.1em] mb-1">{card.title}</p>
+                                        <h2 className="text-[26px] font-black text-[#1C1C1E] tracking-tight leading-none">{card.value}</h2>
+                                        <div className="flex items-center gap-2 mt-2">
+                                            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: card.accent }}></div>
+                                            <span className="text-[#AEAEB2] text-[10px] font-black uppercase tracking-wider">{card.label}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
