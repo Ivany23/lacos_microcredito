@@ -19,6 +19,7 @@ import ClientDetail from "@/pages/Admin/ClientDetail/index";
 import AdminLoans from "@/pages/Admin/Loans";
 import AdminPayments from "@/pages/Admin/Payments";
 import AdminSettings from "@/pages/Admin/Settings";
+import AdminPenalties from "@/pages/Admin/Penalties";
 import BlogPost1 from "@/pages/BlogPost1";
 import BlogPost2 from "@/pages/BlogPost2";
 import BlogPost3 from "@/pages/BlogPost3";
@@ -66,6 +67,7 @@ function Router() {
             <Route path="/admin/loans" component={AdminLoans} />
             <Route path="/admin/payments" component={AdminPayments} />
             <Route path="/admin/settings" component={AdminSettings} />
+            <Route path="/admin/penalties" component={AdminPenalties} />
 
             <Route component={NotFound} />
         </Switch>

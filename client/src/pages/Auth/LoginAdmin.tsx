@@ -4,13 +4,14 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Shield, Lock, ArrowRight, UserCog } from "lucide-react";
+import { Shield, Lock, ArrowRight, UserCog, Eye, EyeOff } from "lucide-react";
 
 export default function LoginAdmin() {
     const { user, loginAdmin, isLoggingIn } = useAuth();
     const [, setLocation] = useLocation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         if (user && user.role === 'admin') {
@@ -70,13 +71,24 @@ export default function LoginAdmin() {
                                 </label>
                                 <div className="relative">
                                     <Input
-                                        type="password"
+                                        type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
-                                        className="h-12 pl-4 pr-4 bg-white/50 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl transition-all"
+                                        className="h-12 pl-4 pr-12 bg-white/50 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl transition-all"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary transition-colors p-1"
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="w-4 h-4" />
+                                        ) : (
+                                            <Eye className="w-4 h-4" />
+                                        )}
+                                    </button>
                                 </div>
                             </div>
 

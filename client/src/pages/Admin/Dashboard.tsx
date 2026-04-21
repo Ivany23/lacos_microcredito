@@ -140,13 +140,41 @@ export default function AdminDashboard() {
     return (
         <AdminLayout title="Dashboard">
             <div className="space-y-8">
-                <div className="space-y-1">
-                    <h2 className="text-[34px] font-[900] text-[#1C1C1E] tracking-tight leading-tight">
-                        Dashboard
-                    </h2>
-                    <p className="text-[#8E8E93] font-semibold text-sm">
-                        Resumo operacional em tempo real
-                    </p>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                        <h2 className="text-[34px] font-[900] text-[#1C1C1E] tracking-tight leading-tight">
+                            Dashboard
+                        </h2>
+                        <p className="text-[#8E8E93] font-semibold text-sm">
+                            Resumo operacional em tempo real
+                        </p>
+                    </div>
+
+                    <button
+                        onClick={async () => {
+                            try {
+                                toast({
+                                    title: "Gerando Relatório",
+                                    description: "Aguarde enquanto preparamos o seu Excel...",
+                                });
+                                await dashboardService.downloadExcelFinanceiro();
+                                toast({
+                                    title: "Sucesso!",
+                                    description: "Relatório financeiro baixado com sucesso.",
+                                });
+                            } catch (error) {
+                                toast({
+                                    title: "Erro",
+                                    description: "Não foi possível gerar o Excel agora.",
+                                    variant: "destructive"
+                                });
+                            }
+                        }}
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-[#1C1C1E] text-white rounded-2xl font-black text-sm hover:bg-black transition-all shadow-lg active:scale-95"
+                    >
+                        <BarChart3 className="w-5 h-5 text-[#34C759]" />
+                        EXTRACTO FINANCEIRO (EXCEL)
+                    </button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">

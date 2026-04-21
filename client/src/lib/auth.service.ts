@@ -1,8 +1,21 @@
-export const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+export const API_BASE_URL = isLocalhost ? "http://localhost:3000" : "https://lacos-microcredito-api.vercel.app";
 
 export interface LoginResponse {
     access_token: string;
-    [key: string]: any;
+    username: string;
+    type: 'cliente' | 'funcionario';
+    // Campos de Funcionário
+    funcionarioId?: string;
+    role?: string;
+    nome?: string;
+    // Campos de Cliente
+    clienteId?: string;
+    cliente?: {
+        nome: string;
+        email: string;
+        telefone: string;
+    };
 }
 
 export const authService = {

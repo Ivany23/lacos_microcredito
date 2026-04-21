@@ -26,12 +26,12 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
         { icon: Users, label: "Clientes", href: "/admin/clients" },
         { icon: Wallet, label: "Empréstimos", href: "/admin/loans" },
         { icon: Receipt, label: "Pagamentos", href: "/admin/payments" },
-        { icon: Settings, label: "Configurações", href: "/admin/settings" },
+        { icon: AlertTriangle, label: "Penalizações", href: "/admin/penalties" },
     ];
 
     return (
         <div className="flex min-h-screen bg-[#F2F2F7]">
-            {}
+            { }
             <aside className="w-[280px] bg-white border-r border-[#E5E5EA] flex flex-col sticky top-0 h-screen hidden md:flex">
                 <div className="p-8">
                     <div className="flex items-center gap-3 px-2 mb-8">
@@ -88,10 +88,10 @@ export function AdminLayout({ children, title }: AdminLayoutProps) {
                 </div>
             </aside>
 
-            {}
+            { }
             <main className="flex-1 overflow-y-auto">
                 <div className="max-w-[1200px] mx-auto p-6 md:p-12">
-                    {}
+                    { }
                     <div className="flex items-center justify-between mb-8">
                         <div className="md:hidden w-10 h-10 bg-white rounded-xl shadow-sm border border-[#E5E5EA] flex items-center justify-center">
                             <LayoutDashboard className="w-5 h-5 text-[#007AFF]" />

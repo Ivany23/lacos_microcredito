@@ -143,5 +143,31 @@ export const dashboardService = {
         }
 
         return response.json();
+    },
+
+    async downloadExcelFinanceiro(): Promise<void> {
+        const token = localStorage.getItem("token");
+        const url = `${API_BASE_URL}/relatorios/financeiro/excel`;
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Falha ao gerar relatório Excel");
+        }
+
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        const dataAtual = new Date().toISOString().split('T')[0];
+        link.setAttribute('download', `Lacos_Financas_Completo_${dataAtual}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
     }
 };
