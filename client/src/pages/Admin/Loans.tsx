@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { clientDetailService } from "@/lib/client-detail.service";
 
-const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "@/lib/api.config";
+
 
 export default function AdminLoans() {
     const { toast } = useToast();

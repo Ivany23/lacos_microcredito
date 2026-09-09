@@ -15,5 +15,11 @@ export default defineConfig({
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
   },
+  esbuild: {
+    // Strip debug logs in production — preserves console.error and console.warn
+    pure: ["console.log", "console.info"],
+    drop: ["debugger"],
+  },
 });
+
 

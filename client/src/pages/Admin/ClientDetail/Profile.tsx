@@ -3,7 +3,8 @@ import { User, MapPin, Briefcase, Phone, Mail, FileText, CreditCard, Building2, 
 import { useToast } from "@/hooks/use-toast";
 import { clientDetailService } from "@/lib/client-detail.service";
 
-const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "@/lib/api.config";
+
 
 const formatDateForInput = (dateString: string) => {
     if (!dateString) return "";

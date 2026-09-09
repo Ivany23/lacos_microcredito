@@ -1,7 +1,12 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { initDevToolsGuard } from "./lib/devtools-guard";
 import "./index.css";
+
+// Initialize DevTools protection (only active in production, disabled in dev mode)
+initDevToolsGuard();
+
 
 /**
  * Global error handler to suppress known third-party analytics errors

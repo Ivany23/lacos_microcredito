@@ -1,5 +1,8 @@
-const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-export const API_BASE_URL = isLocalhost ? "http://localhost:3000" : "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "./api.config";
+
+// Re-export for backward compatibility (other files may import from here)
+export { API_BASE_URL };
+
 
 export interface LoginResponse {
     access_token: string;

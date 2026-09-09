@@ -3,7 +3,8 @@ import { useState } from "react";
 import { clientDetailService } from "@/lib/client-detail.service";
 import { useToast } from "@/hooks/use-toast";
 
-const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "@/lib/api.config";
+
 
 export default function Overview({ data }: { data: any }) {
     const { toast } = useToast();

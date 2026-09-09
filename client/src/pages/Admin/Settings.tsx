@@ -4,7 +4,8 @@ import { Shield, Bell, Database, ChevronRight, Search, Key, Users, ChevronLeft, 
 import { useToast } from "@/hooks/use-toast";
 import { clientService, Cliente } from "@/lib/client.service";
 
-const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "@/lib/api.config";
+
 
 type AuthState = {
     autenticacaoId: string;

@@ -1,4 +1,5 @@
-const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "./api.config";
+
 
 export const clientDetailService = {
 

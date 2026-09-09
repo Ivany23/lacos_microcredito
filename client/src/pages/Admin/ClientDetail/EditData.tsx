@@ -3,7 +3,8 @@ import { User, MapPin, Briefcase, FileText, Save, Loader2, CheckCircle2, Upload 
 import { useToast } from "@/hooks/use-toast";
 import { clientDetailService } from "@/lib/client-detail.service";
 
-const API_BASE_URL = "https://lacos-microcredito-api.vercel.app";
+import { API_BASE_URL } from "@/lib/api.config";
+
 
 type Section = "pessoal" | "localizacao" | "ocupacao" | "documento";
 
